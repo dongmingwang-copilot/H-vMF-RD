@@ -1,0 +1,17 @@
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.venv/
+data/
+pretrained/
+results/
+logs/
+research/
+paper/
+*.pt
+*.pth
+*.npy
+*.npz
+*.dat
+*.zip
+.env
