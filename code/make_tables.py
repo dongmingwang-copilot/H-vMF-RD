@@ -57,9 +57,9 @@ def comparison():
         baseline=data[-2][1][i].mean(0)
         ours=data[-1][1][i].mean(0)
         delta=ours-baseline
-        text += (f'On {dataset}, '+r'\method{}'+f' obtains {ours[0]:.2f} I-AUROC, {ours[1]:.2f} P-AUROC, '
-            f'{ours[2]:.2f} P-AP, and {ours[3]:.2f} AUPRO. Relative to the matched Dinomaly baseline, the changes are '
-            +', '.join(f'{d:+.2f}' for d in delta)+' percentage points, respectively.\n\n')
+        text += (f'Relative to matched Dinomaly on {dataset}, '+r'\method{}'+
+                 ' changes I-AUROC, P-AUROC, P-AP, and AUPRO by '+
+                 ', '.join(f'{d:+.2f}' for d in delta)+' percentage points, respectively.\n\n')
     (OUT/'comparisons.tex').write_text(text)
     return True
 
@@ -74,15 +74,17 @@ def ablation():
         data.append((name,pair))
     text=full_table(data,'Reconstruction ablations with a common teacher and decoder and seed 17. Values are percentages.',
                     'tab:ablation',['3CAD','MVTec AD 2 (public)'])
-    single = data[1][1]
-    cosine = data[0][1]
-    delta = [single[i][0]-cosine[i][0] for i in range(2)]
-    text += (f'The single-component likelihood changes P-AP and AUPRO by {delta[0][2]:+.2f} and '
-             f'{delta[0][3]:+.2f} percentage points on 3CAD, and by {delta[1][2]:+.2f} and '
-             f'{delta[1][3]:+.2f} points on MVTec AD 2.\n\n')
+    by_variant = {variant:pair for (variant,_),(_,pair) in zip(ABLATIONS,data)}
+    single = by_variant['vmf_single']
+    fixed = by_variant['vmf_fixed']
+    cosine = by_variant['dinomaly']
     for index,dataset in enumerate(['3CAD','MVTec AD 2']):
-        cosine_change = data[2][1][index][0]-cosine[index][0]
-        vmf_change = data[3][1][index][0]-single[index][0]
+        change = single[index][0]-fixed[index][0]
+        text += (f'With the residual direction heads held constant, learning concentration changes P-AP and AUPRO by '
+                 f'{change[2]:+.2f} and {change[3]:+.2f} percentage points on {dataset}.\n\n')
+    for index,dataset in enumerate(['3CAD','MVTec AD 2']):
+        cosine_change = by_variant['denoising_cosine_p25'][index][0]-cosine[index][0]
+        vmf_change = by_variant[PRIMARY][index][0]-single[index][0]
         text += (f'On {dataset}, adding directional denoising to cosine reconstruction changes P-AP and AUPRO by '
                  f'{cosine_change[2]:+.2f} and {cosine_change[3]:+.2f} points. '
                  'With the single-component likelihood, the corresponding changes are '

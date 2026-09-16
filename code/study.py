@@ -5,7 +5,7 @@ PRIMARY = 'denoising_vmf_p25'
 METHOD_NAME = 'SDD-RD'
 SEEDS = [17,29,43]
 METHODS = [('rd','RD'),('rdpp','RD++'),('patchcore','PatchCore'),('dinomaly','Dinomaly (matched)'),(PRIMARY,METHOD_NAME)]
-ABLATIONS = [('dinomaly','Cosine'),('vmf_single','Single vMF'),
+ABLATIONS = [('dinomaly','Cosine'),('vmf_fixed','Fixed-concentration vMF'),('vmf_single','Single vMF'),
              ('denoising_cosine_p25','Cosine + denoising'),(PRIMARY,'Single vMF + denoising'),
              ('vmf_mixture','Uniform vMF mixture'),('context_mixture','Contextual vMF mixture'),
              ('coupled_mixture','Coupled vMF mixture')]

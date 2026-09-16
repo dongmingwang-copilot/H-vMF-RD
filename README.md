@@ -46,6 +46,7 @@ Training uses 280-pixel inputs, batch size 16, and 10,000 updates. Repeat with s
 | Variant | Reconstruction | Directional perturbation |
 | --- | --- | --- |
 | `dinomaly` | Dinomaly cosine objective | None |
+| `vmf_fixed` | Single vMF with the same residual mean heads and concentration fixed at d | None |
 | `vmf_single` | Single vMF per hierarchy | None |
 | `denoising_cosine_p25` | Dinomaly cosine objective | Probability 0.25 per image |
 | `denoising_vmf_p25` | Single vMF per hierarchy | Probability 0.25 per image |
@@ -94,11 +95,11 @@ python code/plot_architecture.py
 python code/plot_results.py
 ```
 
-The audit validates checkpoint hashes, split identifiers, native pixel counts, and metric aggregation, and exports `results/measurements.csv`. The research export retains every completed measured variant, including exploratory variants outside the manuscript tables. Tables are generated only after their required measurements exist. Figures are exported as PDF, SVG, and PNG; architecture and perturbation figures use Matplotlib, with the perturbation example drawn from normal training features. The optional tangent-residual scorer and its tests are retained in `code/residual_rd.py` for reproducing the associated reconstruction-score comparison.
+The audit validates checkpoint hashes, split identifiers, native pixel counts, and metric aggregation, and exports `results/measurements.csv`. The research export retains every completed measured variant, including exploratory variants outside the manuscript tables. Tables are generated only after their required measurements exist. Figures are exported as PDF, SVG, and PNG; all scientific figures use Matplotlib. The denoising figure reuses the fixed normal-validation probe, the category figure reports paired three-seed metric differences, and the response figure shows native-coordinate crops, whole-image pixel AP, and score cross-sections. The latter selects the largest gain and loss in category AUPRO within each dataset, then the median anomalous mask fraction within each category. Its within-image percentile scale is used only for display; benchmark scoring is unchanged. Cached normal-validation model outputs are generated automatically when missing. The optional tangent-residual scorer and its tests are retained in `code/residual_rd.py` for reproducing the associated reconstruction-score comparison.
 
 ## Numerical Details
 
-The vMF partition uses float64 exponentially scaled Bessel functions with an analytical derivative. Concentrations lie in `[0.25d, 16d]`. All reconstruction variants use the same positive linear-attention kernel accumulated in float32. This avoids subtractive cancellation in the equivalent ELU-plus-one expression.
+The vMF partition uses float64 exponentially scaled Bessel functions with an analytical derivative. Learned concentrations lie in `[0.25d, 16d]`. The fixed-concentration ablation holds kappa at d=384 without changing the residual direction heads, warm-up, or training budget; it uses seed 17 on each dataset and is excluded from transfer. All reconstruction variants use the same positive linear-attention kernel accumulated in float32. This avoids subtractive cancellation in the equivalent ELU-plus-one expression.
 
 Denoising uses two square regions per selected image, each one quarter of the token-grid side. The regions share their support across hierarchies. Directions are replaced by the spherical midpoint with the previous normal image in the batch, retaining each original token norm. Prefix tokens remain unchanged. An antipodal pair keeps the original direction.
 

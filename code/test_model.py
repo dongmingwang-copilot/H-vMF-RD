@@ -156,3 +156,30 @@ def test_reduced_corruption_selects_whole_images_reproducibly():
     assert ((counts==0)|((counts>=25)&(counts<=50))).all()
     assert 0<int((counts>0).sum())<len(teacher)
     torch.testing.assert_close(first.norm(dim=-1),teacher.norm(dim=-1))
+
+def test_fixed_concentration_preserves_head_capacity_and_cosine_ranking():
+    torch.manual_seed(17)
+    fixed = DirectionalRD("vmf_fixed", dimension=64).eval()
+    learned = DirectionalRD("vmf_single", dimension=64).eval()
+    learned.load_state_dict(fixed.state_dict(), strict=True)
+    teacher = torch.randn(2, 2, 21, 64)
+    with torch.no_grad():
+        for head in fixed.heads:
+            head.concentration[-1].bias.fill_(3.0)
+        output = fixed(teacher)
+        matched = learned(teacher)
+        discrepancies = []
+        for hierarchy, (mean, kappa) in enumerate(output["heads"]):
+            assert torch.equal(kappa, torch.full_like(kappa, 64))
+            torch.testing.assert_close(mean, matched["heads"][hierarchy][0])
+            target = torch.nn.functional.normalize(teacher[:, hierarchy, 5:], dim=-1)
+            discrepancies.append(1 - (target * mean[:, :, 0]).sum(-1))
+        cosine = torch.stack(discrepancies, dim=1).mean(1)
+        constant = (log_partition(torch.tensor(64.), 64) - 64) / 64
+        likelihood = fixed.anomaly_map(teacher, output).flatten(1)
+        torch.testing.assert_close(likelihood, cosine + constant, atol=2e-6, rtol=2e-6)
+    fixed.train()
+    loss = fixed.loss(teacher, fixed(teacher), 600)
+    loss.backward()
+    assert all(head.concentration[-1].weight.grad is None for head in fixed.heads)
+    assert all(head.offset.weight.grad is not None for head in fixed.heads)

@@ -1,12 +1,12 @@
 """Publication architecture: an overview and two visual module expansions."""
 from pathlib import Path
 import json
+from PIL import Image
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Arc, Circle
 import numpy as np
-from PIL import Image
 
 ROOT=Path(__file__).resolve().parent.parent
 OUT=ROOT/'paper/figures'
@@ -126,44 +126,6 @@ def architecture():
     for ext in ['pdf','svg','png']:fig.savefig(OUT/f'architecture.{ext}',facecolor='white')
     plt.close(fig)
 
-def corruption():
-    import torch
-    from torch.nn import functional as F
-    from train import CachedFeatures
-    from model import directional_patch_corruption
-    torch.set_num_threads(2)
-    data = CachedFeatures('3cad',280,'train')
-    positions = [0,1]
-    features = torch.stack([data[i][0] for i in positions]).float()
-    changed = directional_patch_corruption(features,generator=torch.Generator().manual_seed(17))
-    cosine = F.cosine_similarity(features[0,0,5:],changed[0,0,5:],dim=-1).clamp(-1,1)
-    angle = torch.rad2deg(torch.acos(cosine)).reshape(20,20).numpy()
-    difference = (changed[0,0,5:]-features[0,0,5:]).abs().sum(-1).reshape(20,20).numpy()
-    angle[difference<1e-5] = 0
-    rows = [data.rows[data.indices[i]] for i in positions]
-    fig,axes = plt.subplots(1,3,figsize=(3.5,1.7),layout='constrained')
-    for ax,row,label in zip(axes[:2],rows,['Recipient','Normal donor']):
-        ax.imshow(Image.open(row['image']).convert('RGB'))
-        ax.set_title(label,fontsize=7,pad=4)
-        ax.axis('off')
-    im = axes[2].imshow(angle,cmap='viridis',vmin=0,vmax=90,interpolation='nearest')
-    axes[2].set_title('Direction change',fontsize=7,pad=4)
-    axes[2].set(xticks=[],yticks=[])
-    for spine in axes[2].spines.values():
-        spine.set_visible(False)
-    bar = fig.colorbar(im,ax=axes,orientation='horizontal',fraction=.075,pad=.03,shrink=.65)
-    bar.set_ticks([0,30,60,90])
-    bar.ax.tick_params(labelsize=6,pad=1)
-    bar.set_label('Angular change (degrees)',fontsize=7,labelpad=1)
-    error = (features.norm(dim=-1)-changed.norm(dim=-1)).abs().max().item()
-    (OUT/'corruption_provenance.json').write_text(json.dumps({'dataset':'3cad','split':'train',
-        'ids':[row['id'] for row in rows],'generator_seed':17,'max_norm_error':error},indent=2))
-    for ext in ['pdf','svg','png']:
-        fig.savefig(OUT/f'corruption.{ext}',bbox_inches='tight',pad_inches=.035,facecolor='white')
-    plt.close(fig)
-
-
 if __name__=='__main__':
     architecture()
-    corruption()
     print('Architecture written in PDF/SVG/PNG')

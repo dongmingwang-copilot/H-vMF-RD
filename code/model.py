@@ -124,7 +124,7 @@ class DirectionalHead(nn.Module):
 
 
 class DirectionalRD(nn.Module):
-    VARIANTS = ("dinomaly", "vmf_single", "vmf_mixture", "context_mixture", "coupled_mixture",
+    VARIANTS = ("dinomaly", "vmf_fixed", "vmf_single", "vmf_mixture", "context_mixture", "coupled_mixture",
                 "denoising_cosine", "denoising_vmf", "denoising_cosine_p25", "denoising_vmf_p25")
 
     def __init__(self, variant="denoising_vmf_p25", dimension=384):
@@ -135,7 +135,7 @@ class DirectionalRD(nn.Module):
         self.directional = variant not in {'dinomaly', 'denoising_cosine', 'denoising_cosine_p25'}
         self.corruption_probability = 0.25 if variant.endswith('_p25') else 1.0
         self.dimension = dimension
-        self.components = 1 if variant in {'vmf_single', 'denoising_vmf', 'denoising_vmf_p25'} else 3
+        self.components = 1 if variant in {'vmf_fixed', 'vmf_single', 'denoising_vmf', 'denoising_vmf_p25'} else 3
         self.bottleneck = bMlp(dimension, dimension * 4, dimension, drop=0.2)
         self.decoder = nn.ModuleList([
             Block(dim=dimension, num_heads=dimension // 64, mlp_ratio=4., qkv_bias=True,
@@ -178,6 +178,8 @@ class DirectionalRD(nn.Module):
         if not self.directional:
             return {"reconstruction": reconstruction}
         heads = [head(features) for head, features in zip(self.heads, reconstruction)]
+        if self.variant == "vmf_fixed":
+            heads = [(mean, torch.full_like(kappa, self.dimension)) for mean, kappa in heads]
         if self.variant in {"context_mixture", "coupled_mixture"}:
             context = torch.cat([features[:, 5:].mean(1) for features in reconstruction], dim=-1)
             log_weights = F.log_softmax(self.router(context).float(), dim=-1)

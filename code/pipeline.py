@@ -9,7 +9,7 @@ from filelock import FileLock
 ROOT=Path(__file__).resolve().parent.parent
 PYTHON=sys.executable
 DATASETS=['3cad','mvtec_ad2']
-PRIMARY=[('dinomaly',17),('coupled_mixture',17),('vmf_single',17),('vmf_mixture',17),('context_mixture',17),
+PRIMARY=[('vmf_fixed',17),('dinomaly',17),('coupled_mixture',17),('vmf_single',17),('vmf_mixture',17),('context_mixture',17),
          ('dinomaly',29),('coupled_mixture',29),('dinomaly',43),('coupled_mixture',43)]
 JOBS=[(dataset,variant,17) for variant in ['patchcore','rd','rdpp'] for dataset in DATASETS]
 JOBS += [(dataset,variant,seed) for variant,seed in PRIMARY for dataset in DATASETS]
@@ -71,7 +71,7 @@ def evaluation_jobs():
         if not (ROOT/'results'/name/'COMPLETE').exists():
             continue
         targets=[source]
-        if variant not in ['vmf_single','vmf_mixture','context_mixture']:
+        if variant not in ['vmf_fixed','vmf_single','vmf_mixture','context_mixture']:
             targets += [d for d in DATASETS if d!=source]
         for target in targets:
             if ready(target) and (variant in ['rd','rdpp','patchcore'] or cached(target)):
