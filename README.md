@@ -69,6 +69,8 @@ The support diagnostic uses 32 hash-selected validation images per 3CAD category
 
 ## Main files
 
+The 896 timing path uses the same FP16-SDPA teacher and BF16 decoder as its accuracy evaluation. Before timing, the runner checks 16 saved test predictions and records the numerical agreement and checkpoint hash. Throughput is computed from mean batch time; the latency columns report the median and 95th percentile.
+
 - `code/ssrd/network.py`: backbone, inherited hard-gradient cosine loss, and anomaly map.
 - `code/ssrd/spatial_target.py`: perturbation support and seed-17 refinement.
 - `code/ssrd/refine_paired.py`: independent paired repetitions.
