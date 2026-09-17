@@ -1,0 +1,115 @@
+{
+  "repository": "https://github.com/EnquanYang2022/3CAD",
+  "commit": "b5e66a122cf445afb445f2c528c70686718ae6b8",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "29c19c3abf740b107de3975ed7d48114a37ab362e6745bc5de572323bdd2d3d4"
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "460433375d75023e7c3568d57cba58efcf06d79c517ac6b695d4345525e386e6"
+    },
+    {
+      "path": "test.py",
+      "sha256": "18d18823f7545a1dd0eed125d45e1e6b30618b1b49603fa1c9a7cddc7969344f"
+    },
+    {
+      "path": "train.py",
+      "sha256": "7bb37b22fa3da8d37ff790b1cf2665116f8f76f3f3260e441c8de6d8422092cb"
+    },
+    {
+      "path": "train_utils/__init__.py",
+      "sha256": "b7f18a65113108f8f3ef508516c0f1be1732eb656976bffa85277608aedf8049"
+    },
+    {
+      "path": "train_utils/loger_utils.py",
+      "sha256": "efa63dba42cbf9f06336789a4e5876cee2a8ef6358f36e8c8a2ec400cc069c90"
+    },
+    {
+      "path": "train_utils/toolbox/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "train_utils/toolbox/datasets/Data_3CAD.py",
+      "sha256": "6b1d9776e4ad9e96020dc2a4e8595701594816e59cfbdb2bd509acb499cc787b"
+    },
+    {
+      "path": "train_utils/toolbox/datasets/MvtecAD.py",
+      "sha256": "5fee043b564f4c64ee91bc5d47982e5b800d2e2657f6510b2cc0a83c816c564f"
+    },
+    {
+      "path": "train_utils/toolbox/datasets/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "train_utils/toolbox/datasets/data_utils.py",
+      "sha256": "7d7553c996fb38795106cd2c8f473e919d4b57327ed5edae93eb26e2b190237b"
+    },
+    {
+      "path": "train_utils/toolbox/datasets/transforms.py",
+      "sha256": "5cbd0145420681e7ba13baacae5c4fd1199aa108c76922275f7a5af9bc6ce6ef"
+    },
+    {
+      "path": "train_utils/toolbox/loss.py",
+      "sha256": "22380b56854781395cffd46d46fc2f12b45de4cb69e62c1914f7dbeae2043400"
+    },
+    {
+      "path": "train_utils/toolbox/metrics.py",
+      "sha256": "e23ad6523faa6329803fa58c2c51cc3263a838bde10c36aedd18628d312c680c"
+    },
+    {
+      "path": "train_utils/toolbox/models/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "train_utils/toolbox/models/cfrg/Adapter.py",
+      "sha256": "c800c88a188a36349b6355afe8307da3c65b8d300bb123c613497871d5e2e11d"
+    },
+    {
+      "path": "train_utils/toolbox/models/cfrg/Segmentation.py",
+      "sha256": "215630310a6eab163acc35fab146322fd646c69692813aea4fd9b07a2f4d45bd"
+    },
+    {
+      "path": "train_utils/toolbox/models/cfrg/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "train_utils/toolbox/models/cfrg/de_resnet.py",
+      "sha256": "5efdba67e2c5db19d0eec9ee1d3aa07f985e4387c0067a6e744c2d71cadd648a"
+    },
+    {
+      "path": "train_utils/toolbox/models/cfrg/efficientnet/__init__.py",
+      "sha256": "b57900aa43204800fff6dbe229b279c5ceace8b64dd2a8b7346c346d0159c371"
+    },
+    {
+      "path": "train_utils/toolbox/models/cfrg/efficientnet/model.py",
+      "sha256": "7fd8450c6ed92d2a84ed5eaf9ee816ec5a6770fc681b7b6fa8cb1be448134519"
+    },
+    {
+      "path": "train_utils/toolbox/models/cfrg/efficientnet/utils.py",
+      "sha256": "1c6db51f19968894c062bd5f4aab649e5d65a38864ecc1481bb6f48bdbbe7402"
+    },
+    {
+      "path": "train_utils/toolbox/models/cfrg/model.py",
+      "sha256": "7c022ec215c109f6c5a5f083b85873736bb8307f6c0a9b1f035acc7badbbc4f8"
+    },
+    {
+      "path": "train_utils/toolbox/models/cfrg/resnet.py",
+      "sha256": "7cd0fb0a170e71b13a94efb4f7d96b859a43b8474fd9383ac57d72e5f5b3a13f"
+    },
+    {
+      "path": "train_utils/toolbox/models/model_utils.py",
+      "sha256": "d684e373d169171d26d57ece76b0ea2a3f175190c85fe9324e50a11b866148d9"
+    },
+    {
+      "path": "train_utils/toolbox/utils.py",
+      "sha256": "d9d4e6b29ea4559fae66d8ff3c58fa867dfacd4e95b414c6d51b962c17f13532"
+    },
+    {
+      "path": "train_utils/train_and_eval.py",
+      "sha256": "dbe46a60892fb3e9fc57a158fb03091415d920d6cdb0f010a8d4f360f017c538"
+    }
+  ],
+  "license": "No license file in fetched source tree; use fetch-only distribution"
+}

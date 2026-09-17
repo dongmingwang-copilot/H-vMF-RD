@@ -1,0 +1,15 @@
+{
+  "repository": "https://github.com/Yue454/HFSA",
+  "commit": "a6dcf35edeb1dfb49f50fa067c1d37f1b9cd5ba3",
+  "files": {
+    "teacher.py": {
+      "url": "https://raw.githubusercontent.com/Yue454/HFSA/a6dcf35edeb1dfb49f50fa067c1d37f1b9cd5ba3/teacher.py",
+      "sha256": "c1c94bbdcdce0e4ecbedf7e76374fc2800b443118b5d663eb50955508245586b"
+    },
+    "student.py": {
+      "url": "https://raw.githubusercontent.com/Yue454/HFSA/a6dcf35edeb1dfb49f50fa067c1d37f1b9cd5ba3/student.py",
+      "sha256": "a3f9169a45b39b852b4648796f3c6d03cbc3a219cb5b7e63e02f3661af565a58"
+    }
+  },
+  "matches_training_sources": true
+}
