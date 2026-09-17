@@ -1,4 +1,4 @@
-"""Category-resolved CFRG comparison and fixed complementary component cases."""
+"""Category-resolved CFRG comparison and illustrative gain and near-parity cases."""
 from pathlib import Path
 import json,hashlib
 import numpy as np,cv2
@@ -50,8 +50,10 @@ Component & Test images & Foreground & SS-RD & CFRG & SS-RD & CFRG\\
 """
 (G/"component_cfrg.tex").write_text(table)
 (F/"component_cfrg_data.json").write_text(json.dumps(data,indent=2))
-# Four categories complement the four cases in the existing within-backbone figure.
-casecats=["Aluminum_Ipad","Aluminum_New_Ipad","Aluminum_New_Middle_Frame","Copper_Stator"]
+# Categories and images are determined by the disclosed performance-stratified rule.
+selection=json.loads((WORK/"submission_case_study/representative_cases/selection.json").read_text())
+casecats=selection["categories"]
+chosen={e["category"]:e["id"] for e in selection["entries"]}
 paths={v:WORK/f"runs/3cad_{v}_s17/eval_3cad_12000" for v in ["normal_continue","spatial_target","cfrg448"]}
 rows=json.loads((paths["spatial_target"]/"rows.json").read_text())
 for q in paths.values():assert [r["id"] for r in json.loads((q/"rows.json").read_text())]==[r["id"] for r in rows]
@@ -63,7 +65,7 @@ fig.subplots_adjust(left=.035,right=.98,top=.95,bottom=.07)
 entries=[]
 for j,cat in enumerate(casecats):
     ids=[i for i,r in enumerate(rows) if r["category"]==cat and r["label"]]
-    i=min(ids,key=lambda i:hashlib.sha256(("localization-audit:"+rows[i]["id"]).encode()).hexdigest())
+    i=next(i for i in ids if rows[i]["id"]==chosen[cat])
     row=rows[i];mask=np.asarray(Image.open(row["mask"]).convert("L"))>0;h,w=mask.shape
     rgb=cv2.resize(np.asarray(Image.open(row["image"]).convert("RGB")),(w,h))
     _,comp,stats,centroids=cv2.connectedComponentsWithStats(mask.astype(np.uint8),8)
@@ -103,6 +105,6 @@ for j,cat in enumerate(casecats):
        "raw_limits":{"matched":[lows[0],highs[0]],"cfrg":[lows[2],highs[2]]}})
 for suffix in ["pdf","png"]:fig.savefig(F/f"component_cases.{suffix}",bbox_inches="tight",pad_inches=.025,dpi=220)
 plt.close(fig)
-(F/"component_cases_data.json").write_text(json.dumps({"selection":"minimum SHA256(localization-audit:id); remaining four 3CAD categories","entries":entries,
+(F/"component_cases_data.json").write_text(json.dumps({"selection":selection,"entries":entries,
  "display":"normal and SS-RD share full-image raw range; CFRG uses separate raw scale because its score adds segmentation and three residuals; no pixel values are altered"},indent=2))
 print(json.dumps(entries),flush=True)

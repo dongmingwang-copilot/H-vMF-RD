@@ -61,10 +61,11 @@ The matched decoder implements the Dinomaly reconstruction backbone and is disti
 After the completed runs, reproduce the fixed 256-image normal-validation diagnostic and category-resolved CFRG cases with:
 
     python code/ssrd/submission_support_study.py
+    python code/ssrd/submission_representative_cases.py
     python code/ssrd/submission_component_cases.py
     python code/ssrd/submission_resolution_timing.py
 
-The support diagnostic uses 32 hash-selected validation images per 3CAD category, fixed line/patch perturbations, and the final checkpoints for seeds 17, 29, and 43. It does not fit or select models. The component analysis reads all category metrics and uses fixed image identifiers for the complementary natural-defect cases. The resolution timing study measures the completed 896 checkpoint at batches 1 and 16, using three isolated rounds of 50 warm-up and 100 timed batches and Gaussian sigma 8. Generated results stay under `results/submission_case_study/`; they are not tracked in this repository.
+The support diagnostic uses 32 hash-selected validation images per 3CAD category, fixed line/patch perturbations, and the final checkpoints for seeds 17, 29, and 43. It does not fit or select models. The component analysis reports all eight category metrics. Figure cases are deliberately selected to illustrate pronounced SS-RD gains and near-parity outcomes. The category strata are the two smaller positive and two smaller-magnitude negative pooled category P-AP gaps. All anomalous images in those categories are scored on the native annotation grid. Gain cases are nearest the 90th percentile of SS-RD minus CFRG per-image AP gaps; near-parity cases have both AP values at least 50%, a negative gap, and a gap nearest -2 percentage points. SHA-256 identifiers break ties. These are illustrative, performance-selected cases rather than random or typical samples; the full-test category table remains the performance comparison. The selector records every evaluated per-image AP and the chosen identifiers. The resolution timing study measures the completed 896 checkpoint at batches 1 and 16, using three isolated rounds of 50 warm-up and 100 timed batches and Gaussian sigma 8. Generated results stay under `results/submission_case_study/`; they are not tracked in this repository.
 
 ## Main files
 
