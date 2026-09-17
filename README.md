@@ -56,6 +56,15 @@ All test images, including normal backgrounds, enter evaluation. Metrics are cat
 
 The matched decoder implements the Dinomaly reconstruction backbone and is distinct from the convolutional RD 2022 baseline. Resolution comparisons use separate normal-continuation controls. Timing uses a fresh process per model, batch size, and repetition: 50 warm-up batches, 100 timed batches, and three repetitions with alternating method order. With normalized inputs already on the GPU, it includes the teacher, decoder, score-map construction, transfer of scores to the CPU, resizing, Gaussian smoothing, and the image-score maximum. Image decoding, normalization, and input upload occur before the timed path. Real-defect masks are used for evaluation and annotated figures, not model fitting.
 
+## Component and support analyses
+
+After the completed runs, reproduce the fixed 256-image normal-validation diagnostic and category-resolved CFRG cases with:
+
+    python code/ssrd/submission_support_study.py
+    python code/ssrd/submission_component_cases.py
+
+The support diagnostic uses 32 hash-selected validation images per 3CAD category, fixed line/patch perturbations, and the final checkpoints for seeds 17, 29, and 43. It does not fit or select models. The component analysis reads all category metrics and uses fixed image identifiers for the complementary natural-defect cases. Generated results stay under `results/submission_case_study/`; they are not tracked in this repository.
+
 ## Main files
 
 - `code/ssrd/network.py`: backbone, inherited hard-gradient cosine loss, and anomaly map.
