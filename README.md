@@ -62,8 +62,9 @@ After the completed runs, reproduce the fixed 256-image normal-validation diagno
 
     python code/ssrd/submission_support_study.py
     python code/ssrd/submission_component_cases.py
+    python code/ssrd/submission_resolution_timing.py
 
-The support diagnostic uses 32 hash-selected validation images per 3CAD category, fixed line/patch perturbations, and the final checkpoints for seeds 17, 29, and 43. It does not fit or select models. The component analysis reads all category metrics and uses fixed image identifiers for the complementary natural-defect cases. Generated results stay under `results/submission_case_study/`; they are not tracked in this repository.
+The support diagnostic uses 32 hash-selected validation images per 3CAD category, fixed line/patch perturbations, and the final checkpoints for seeds 17, 29, and 43. It does not fit or select models. The component analysis reads all category metrics and uses fixed image identifiers for the complementary natural-defect cases. The resolution timing study measures the completed 896 checkpoint at batches 1 and 16, using three isolated rounds of 50 warm-up and 100 timed batches and Gaussian sigma 8. Generated results stay under `results/submission_case_study/`; they are not tracked in this repository.
 
 ## Main files
 
